@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 from .forms import TaskForm,CompleteTaskForm
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
-from django.contrib.auth import logout
+from django.contrib.auth import logout,login
+from django.views.generic import FormView
+from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 class UserLoginView(LoginView):
@@ -19,14 +21,29 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
+
+def register(request):
+    if request.method =='POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    form=UserCreationForm()
+    return render(request,'home/register.html',{'form':form})
+
+
 @login_required(login_url='login')
 def index(request):
     current_user=request.user
     tasks = Task.objects.filter(user=current_user)
     form = TaskForm()
     if request.method == 'POST':
+        
         form = TaskForm(request.POST or None)
+        title= request.POST.get('title')
         if form.is_valid():
+            user=request.user
+            form=Task(user=user,title=title)
             form.save()
             return redirect('/')
 
