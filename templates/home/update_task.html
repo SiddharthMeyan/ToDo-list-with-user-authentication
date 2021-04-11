@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %} welcome< here are your tasks{% endblock title %}
+{% block body %}
+{% if user.id == instance.user.id %}
+
+{% load crispy_forms_tags %}
+<div class="container mt-4">
+<form action="" method=POST>
+{% csrf_token %}
+{{form|crispy}}
+<br>
+<input type="submit" class='btn btn-secondary' name="create">
+<br>
+</div>
+</form>
+
+{% else %}
+<center>
+<div class='container my-3'>
+<h2> Please <a href="{% url 'login' %}"> Login</a> to Edit.</h2> 
+</div>
+</center>{% endif %}
+
+
+{% endblock body %}

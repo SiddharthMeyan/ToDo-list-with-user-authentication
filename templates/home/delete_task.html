@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block body %}
+{% if user == task.user %}
+
+<h3>Are you Sure you want to delete {{task}}</h3>
+<div class="container">
+<a class='btn btn-secondary' href="{% url 'home' %}">Cancel</a> 
+
+<form action="" method='POST'>
+{% csrf_token %}
+<input type="submit" class='btn btn-danger my-2' name="Confirm">
+
+</form>
+</div>
+{% else %}
+<div class='container'>
+You cannot View this page.
+{% endif %}
+</div>
+{% endblock body %}
